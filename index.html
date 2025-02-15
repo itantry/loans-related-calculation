@@ -1,21 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>Home Loan Calculator</title>
-
   <link rel="stylesheet" href="styles.css" />
-
 </head>
 
 <body>
-
   <!-- Main content container -->
   <div class="container">
     <div class="top-row">
@@ -31,28 +24,37 @@
             </div>
 
             <!-- Rate of Interest Slider -->
-            <label for="roi">Rate of Interest (%): <span id="roiValue">7.0</span></label>
-            <input type="range" id="roi" min="7" max="11" step="0.1" value="7" />
+            <div class="form-group">
+              <label for="roi">Rate of Interest (%): <span id="roiValue">7.0</span></label>
+              <input type="range" id="roi" min="7" max="11" step="0.1" value="7" />
+            </div>
 
             <!-- Tenure Slider -->
-            <label for="tenure">Tenure (Years): <span id="tenureValue">5</span></label>
-            <input type="range" id="tenure" min="1" max="30" step="1" value="5" />
+            <div class="form-group">
+              <label for="tenure">Tenure (Years): <span id="tenureValue">5</span></label>
+              <input type="range" id="tenure" min="1" max="30" step="1" value="5" />
+            </div>
 
             <!-- Additional Payments Slider -->
-            <label for="additionalPayments">Additional Payments (₹): <span id="additionalPaymentsValue">0</span></label>
-            <input type="range" id="additionalPayments" min="0" max="1000000" step="1000" value="0" />
+            <div class="form-group">
+              <label for="additionalPayments">Additional Payments (₹): <span id="additionalPaymentsValue">0</span></label>
+              <input type="range" id="additionalPayments" min="0" max="1000000" step="1000" value="0" />
+            </div>
 
             <!-- Additional Payments Frequency -->
-            <label for="frequency">Frequency of Additional Payments:</label>
-            <select id="frequency">
-              <option value="1">Monthly</option>
-              <option value="3">Quarterly</option>
-              <option value="6">Half-Yearly</option>
-              <option value="12">Yearly</option>
-            </select>
+            <div class="form-group">
+              <label for="frequency">Frequency of Additional Payments:</label>
+              <select id="frequency">
+                <option value="1">Monthly</option>
+                <option value="3">Quarterly</option>
+                <option value="6">Half-Yearly</option>
+                <option value="12">Yearly</option>
+              </select>
+            </div>
+
+            <button id="compareBtn" type="button">Add Comparison</button>
+            <button type="button" id="clearBtn">Clear Comparisons</button>
           </form>
-          <button id="compareBtn" type="button">Add Comparison</button>
-          <button type="button" id="clearBtn">Clear Comparisons</button>
         </div>
       </div>
 
@@ -118,4 +120,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>
+```
