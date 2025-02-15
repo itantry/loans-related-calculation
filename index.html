@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Home Loan Calculator</title>
+
+  <link rel="stylesheet" href="styles.css" />
+
+</head>
+
+<body>
+
+  <!-- Main content container -->
+  <div class="container">
+    <div class="top-row">
+      <!-- Left Column: Form -->
+      <div class="left-col">
+        <div class="form-container">
+          <h1>Home Loan Calculator</h1>
+          <form id="loanForm">
+            <!-- Principal Amount -->
+            <div class="form-group">
+              <label for="principalManual">Principal Amount (₹):</label>
+              <input type="number" id="principalManual" placeholder="Enter amount manually">
+            </div>
+
+            <!-- Rate of Interest Slider -->
+            <label for="roi">Rate of Interest (%): <span id="roiValue">7.0</span></label>
+            <input type="range" id="roi" min="7" max="11" step="0.1" value="7" />
+
+            <!-- Tenure Slider -->
+            <label for="tenure">Tenure (Years): <span id="tenureValue">5</span></label>
+            <input type="range" id="tenure" min="1" max="30" step="1" value="5" />
+
+            <!-- Additional Payments Slider -->
+            <label for="additionalPayments">Additional Payments (₹): <span id="additionalPaymentsValue">0</span></label>
+            <input type="range" id="additionalPayments" min="0" max="1000000" step="1000" value="0" />
+
+            <!-- Additional Payments Frequency -->
+            <label for="frequency">Frequency of Additional Payments:</label>
+            <select id="frequency">
+              <option value="1">Monthly</option>
+              <option value="3">Quarterly</option>
+              <option value="6">Half-Yearly</option>
+              <option value="12">Yearly</option>
+            </select>
+          </form>
+          <button id="compareBtn" type="button">Add Comparison</button>
+          <button type="button" id="clearBtn">Clear Comparisons</button>
+        </div>
+      </div>
+
+      <!-- Right Column: Results and Charts -->
+      <div class="right-col">
+        <div id="results">
+          <h2>Results</h2>
+          <p>Monthly EMI: ₹<span id="emi">0</span></p>
+          <p>Estimated Interest (Original Tenure): ₹<span id="estimatedInterest">0</span></p>
+          <p>Actual Interest Paid (with Additional Payments): ₹<span id="actualInterest">0</span></p>
+          <p>Adjusted Tenure: <span id="adjustedTenure">0</span> years</p>
+        </div>
+
+        <div class="charts">
+          <div class="chart-container">
+            <h3>Total Payment Breakdown</h3>
+            <div class="canvas-wrapper">
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
+          <div class="chart-container">
+            <h3>Remaining Principal Over Time</h3>
+            <div class="canvas-wrapper">
+              <canvas id="lineChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="comparisonTableContainer">
+    <h2>Comparison Table</h2>
+    <button id="downloadPdfBtn" type="button">Download PDF</button>
+    <table id="comparisonTable">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>Principal (₹)</th>
+          <th>Interest Rate (%)</th>
+          <th>Tenure (Years)</th>
+          <th>Additional Payment (₹)</th>
+          <th>Frequency</th>
+          <th>EMI (₹)</th>
+          <th>Estimated Interest (₹)</th>
+          <th>Actual Interest (₹)</th>
+          <th>Adjusted Tenure (Years)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table rows dynamically inserted -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- New Footer -->
+  <footer>
+    <p>&copy; 2025 netburk.com</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
