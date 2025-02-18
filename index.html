@@ -10,7 +10,7 @@
         /* Hamburger Menu Styles */
         .navbar {
             overflow: hidden;
-            background-color: var(--primary-color);
+            background-color: #a1a1a8; /* Lighter shade of primary color */
             display: flex;
             justify-content: space-between; /* Align items to the ends */
             align-items: center; /* Vertically center items */
@@ -35,12 +35,24 @@
             cursor: pointer;
         }
 
-      .menu-items {
-        display: flex; /* Initially display items in a row */
-      }
+        .navbar-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: bold;
+            padding: 14px 0px;
+        }
+
+        .menu-items {
+            display: flex; /* Initially display items in a row */
+        }
 
         @media screen and (max-width: 600px) {
-            .navbar .menu-items {display: none;}
+            .navbar .menu-items {
+                display: none;
+            }
+            .navbar .navbar-title{
+                display: none;
+            }
             .navbar a.icon {
                 display: block;
             }
@@ -52,17 +64,17 @@
                 transform: translateY(-50%);
             }
             .navbar.responsive .menu-items {
-              display: block;
-              position: absolute;
-              top: 58px; /* Adjust based on navbar height */
-              left: 0;
-              width: 100%;
-              background-color: var(--primary-color);
+                display: block;
+                position: absolute;
+                top: 58px;  /*Adjust based on navbar height */
+                left: 0;
+                width: 100%;
+                background-color: #6366f1; /* Lighter shade of primary color */
             }
             .navbar.responsive .menu-items a {
-              float: none;
-              display: block;
-              text-align: left;
+                float: none;
+                display: block;
+                text-align: left;
             }
         }
     </style>
@@ -71,6 +83,7 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar" id="myNavbar" style="margin-bottom: 10px;">
+        <div class="navbar-title">Home Loan Calculator</div>
         <div class="menu-items">
             <a href="about.html">About</a>
         </div>
@@ -87,7 +100,6 @@
       <div class="left-col">
         <!-- Form Container -->
         <div class="form-container">
-          <h1>Home Loan Calculator</h1>
           <form id="loanForm">
             <!-- Principal Amount -->
             <div class="form-group">
