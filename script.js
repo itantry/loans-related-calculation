@@ -1,21 +1,31 @@
 let pieChartInstance = null;
 let lineChartInstance = null;
-let comparisons = []; // Array to store comparison scenarios
+
+/**
+ * Updates the displayed value of a slider.
+ * @param {string} sliderId - The ID of the slider element.
+ * @param {string} valueSpanId - The ID of the span element displaying the value.
+ */
+function updateSliderValue(sliderId, valueSpanId) {
+  const slider = document.getElementById(sliderId);
+  const valueSpan = document.getElementById(valueSpanId);
+  valueSpan.textContent = slider.value;
+}
 
 /**
  * Calculates the loan EMI, estimated interest, actual interest, and adjusted tenure.
  * Updates the UI with the calculated results and generates charts.
  */
 function calculateLoan() {
-  // Get input values
-  const principalAmount = parseFloat(document.getElementById('principalManual').value);
-  const annualInterestRate = parseFloat(document.getElementById('roi').value);
-  const loanTenureYears = parseFloat(document.getElementById('tenure').value);
+  // Get input values, using consistent naming
+  const principal = parseFloat(document.getElementById('principalManual').value);
+  const interestRate = parseFloat(document.getElementById('roi').value);
+  const tenure = parseFloat(document.getElementById('tenure').value);
   const additionalPayments = parseFloat(document.getElementById('additionalPayments').value);
   const paymentFrequency = parseInt(document.getElementById('frequency').value);
 
   // Validate principal amount
-  if (isNaN(principalAmount) || principalAmount <= 0) {
+  if (isNaN(principal) || principal <= 0) {
     alert("Please enter a valid principal amount.");
     return;
   }
@@ -23,11 +33,11 @@ function calculateLoan() {
   const {
     emi,
     estimatedInterest
-  } = calculateEmiAndInterest(principalAmount, annualInterestRate, loanTenureYears);
+  } = calculateEmiAndInterest(principal, interestRate, tenure);
   const {
     actualInterest,
     adjustedTenureMonths
-  } = calculateActualInterestAndAdjustedTenure(principalAmount, annualInterestRate, loanTenureYears, additionalPayments, paymentFrequency, emi);
+  } = calculateActualInterestAndAdjustedTenure(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
 
   // Display results in the main results section
   document.getElementById('emi').textContent = emi.toFixed(2);
@@ -36,15 +46,15 @@ function calculateLoan() {
   document.getElementById('adjustedTenure').textContent = (adjustedTenureMonths / 12).toFixed(1);
 
   // Update charts
-  updatePieChart(principalAmount, actualInterest);
-  updateLineChart(principalAmount, annualInterestRate, loanTenureYears, additionalPayments, paymentFrequency, emi);
+  updatePieChart(principal, actualInterest);
+  updateLineChart(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
 }
 
 /**
  * Calculates EMI and estimated interest without additional payments.
  */
-function calculateEmiAndInterest(principal, roi, tenure) {
-  const monthlyInterestRate = (roi / 100) / 12;
+function calculateEmiAndInterest(principal, interestRate, tenure) {
+  const monthlyInterestRate = (interestRate / 100) / 12;
   const numberOfPayments = tenure * 12;
   const emi = (principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
     (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
@@ -58,10 +68,10 @@ function calculateEmiAndInterest(principal, roi, tenure) {
 /**
  * Calculates actual interest and adjusted tenure with additional payments.
  */
-function calculateActualInterestAndAdjustedTenure(principal, roi, tenure, additionalPayments, frequency, emi) {
+function calculateActualInterestAndAdjustedTenure(principal, interestRate, tenure, additionalPayments, frequency, emi) {
   let actualInterest = 0;
   let adjustedTenureMonths = 0;
-  const monthlyInterestRate = (roi / 100) / 12;
+  const monthlyInterestRate = (interestRate / 100) / 12;
   const numberOfPayments = tenure * 12;
 
   if (additionalPayments > 0) {
@@ -85,7 +95,7 @@ function calculateActualInterestAndAdjustedTenure(principal, roi, tenure, additi
   } else {
     const {
       estimatedInterest
-    } = calculateEmiAndInterest(principal, roi, tenure);
+    } = calculateEmiAndInterest(principal, interestRate, tenure);
     actualInterest = estimatedInterest;
     adjustedTenureMonths = numberOfPayments;
   }
@@ -130,9 +140,9 @@ function updatePieChart(principal, actualInterest) {
 /**
  * Updates or creates the line chart showing remaining principal over time.
  */
-function updateLineChart(principal, roi, tenure, additionalPayments, frequency, emi) {
+function updateLineChart(principal, interestRate, tenure, additionalPayments, frequency, emi) {
   const ctx = document.getElementById('lineChart').getContext('2d');
-  const monthlyInterestRate = (roi / 100) / 12;
+  const monthlyInterestRate = (interestRate / 100) / 12;
   const numberOfPayments = tenure * 12;
 
   // Simulate remaining principal over time
@@ -154,272 +164,150 @@ function updateLineChart(principal, roi, tenure, additionalPayments, frequency, 
     if (remainingPrincipal <= 0) break; // Stop if principal is paid off
   }
 
-  if (lineChartInstance) {
-    lineChartInstance.data.labels = Array.from({
-      length: data.length
-    }, (_, i) => `Month ${i + 1}`);
-    lineChartInstance.data.datasets[0].data = data;
-    lineChartInstance.data.datasets[0].borderColor = '#007bff'; // Update line color
-    lineChartInstance.update();
-  } else {
-    const lineChartConfig = {
-      type: 'line',
-      data: {
-        labels: Array.from({
-          length: data.length
-        }, (_, i) => `Month ${i + 1}`),
-        datasets: [{
-          label: 'Remaining Principal',
-          data: data,
-          borderColor: '#007bff', // Blue color
-          fill: false,
-          tension: 0.4, // Smooth the line
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: {
-          padding: {
-            top: 10,
-            bottom: 10,
-            left: 10,
-            right: 10
-          }
-        },
-        scales: {
-          x: {
-            grid: {
-              display: false
-            }
-          },
-          y: {
-            grid: {
-              display: true,
-              color: 'rgba(0,0,0,0.1)'
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            display: true,
-            position: 'top'
-          },
-          tooltip: {
-            enabled: true
-          }
-        }
-      }
-    };
-
-    // Create the chart (assuming canvas id is lineChart)
-    const lineChartCanvas = document.getElementById("lineChart").getContext("2d");
-    new Chart(lineChartCanvas, lineChartConfig);
-  }
+    if (lineChartInstance) {
+        lineChartInstance.data.labels = Array.from({ length: data.length }, (_, i) => `Month ${i + 1}`);
+        lineChartInstance.data.datasets[0].data = data;
+        lineChartInstance.update();
+    } else {
+        lineChartInstance = new Chart(ctx, { // Assign the new chart instance
+            type: 'line',
+            data: {
+                labels: Array.from({ length: data.length }, (_, i) => `Month ${i + 1}`),
+                datasets: [{
+                    label: 'Remaining Principal',
+                    data: data,
+                    borderColor: '#007bff',
+                    fill: false,
+                    tension: 0.4,
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        grid: {
+                            display: false,
+                        },
+                    },
+                    y: {
+                        ticks: {
+                            callback: function(value) {
+                                return value;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                },
+            },
+        });
+    }
 }
 
 /**
  * Adds the current loan scenario to the comparison table.
  */
 function addToComparison() {
-  const principalAmount = parseFloat(document.getElementById('principalManual').value);
-  const annualInterestRate = parseFloat(document.getElementById('roi').value);
-  const loanTenureYears = parseFloat(document.getElementById('tenure').value);
+  const principal = parseFloat(document.getElementById('principalManual').value);
+  const interestRate = parseFloat(document.getElementById('roi').value);
+  const tenure = parseFloat(document.getElementById('tenure').value);
   const additionalPayments = parseFloat(document.getElementById('additionalPayments').value);
   const paymentFrequency = parseInt(document.getElementById('frequency').value);
   const frequencyText = document.getElementById('frequency').options[document.getElementById('frequency').selectedIndex].text;
 
-  const {
-    emi,
-    estimatedInterest
-  } = calculateEmiAndInterest(principalAmount, annualInterestRate, loanTenureYears);
-  const {
-    actualInterest,
-    adjustedTenureMonths
-  } = calculateActualInterestAndAdjustedTenure(principalAmount, annualInterestRate, loanTenureYears, additionalPayments, paymentFrequency, emi);
+  const { emi, estimatedInterest } = calculateEmiAndInterest(principal, interestRate, tenure);
+  const { actualInterest, adjustedTenureMonths } = calculateActualInterestAndAdjustedTenure(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
 
-  if (comparisons.length < 10) {
-    comparisons.push({
-      scenario: comparisons.length + 1,
-      principal: principalAmount,
-      interestRate: annualInterestRate,
-      tenure: loanTenureYears,
-      additionalPayment: additionalPayments,
-      frequency: frequencyText,
-      emi: emi.toFixed(2),
-      estimatedInterest: estimatedInterest.toFixed(2),
-      actualInterest: actualInterest.toFixed(2),
-      adjustedTenure: (adjustedTenureMonths / 12).toFixed(1)
-    });
-    updateComparisonTable();
-  } else {
-    alert("You can compare a maximum of 10 scenarios.");
-  }
-}
 
-/**
- * Updates the comparison table with the current comparison data.
- */
-function updateComparisonTable() {
-  const tableBody = document.getElementById('comparisonTable').getElementsByTagName('tbody')[0];
-  tableBody.innerHTML = ''; // Clear existing rows
+    const tableBody = document.querySelector("#comparisonTable tbody");
 
-  for (const comparison of comparisons) {
-    const row = tableBody.insertRow();
-    row.insertCell(0).textContent = comparison.scenario;
-    row.insertCell(1).textContent = comparison.principal;
-    row.insertCell(2).textContent = comparison.interestRate;
-    row.insertCell(3).textContent = comparison.tenure;
-    row.insertCell(4).textContent = comparison.additionalPayment;
-    row.insertCell(5).textContent = comparison.frequency;
-    row.insertCell(6).textContent = comparison.emi;
-    row.insertCell(7).textContent = comparison.estimatedInterest;
-    row.insertCell(8).textContent = comparison.actualInterest;
-    row.insertCell(9).textContent = comparison.adjustedTenure;
-  }
+     // Limit comparisons to 10 scenarios.
+    if (tableBody.rows.length >= 10) {
+      alert("A maximum of 10 comparison scenarios are allowed.");
+      return;
+    }
+
+  // Create a new row in the comparison table.
+  const newRow = tableBody.insertRow();
+
+  // Add data to the row.
+  [
+    tableBody.rows.length, // Use insertRow index for scenario number
+    principal,
+    interestRate,
+    tenure,
+    additionalPayments,
+    frequencyText,
+    emi.toFixed(2),
+    estimatedInterest.toFixed(2),
+    actualInterest.toFixed(2),
+    (adjustedTenureMonths / 12).toFixed(1)
+  ].forEach(value => {
+    const cell = newRow.insertCell();
+    cell.textContent = value;
+  });
 }
 
 /**
  * Clears all comparison data and the comparison table.
  */
 function clearComparisons() {
-  comparisons = [];
-  updateComparisonTable();
+    const tableBody = document.querySelector("#comparisonTable tbody");
+    tableBody.innerHTML = '';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Toggle principal manual entry
-  const toggleBtn = document.getElementById("togglePrincipalManual");
-  const principalManual = document.getElementById("principalManual");
-  const principalSlider = document.getElementById("principalSlider");
-
-  toggleBtn.addEventListener("click", () => {
-    if (principalManual.style.display === "none" || principalManual.style.display === "") {
-      principalManual.style.display = "block";
-      // Optional: hide the slider if manual entry is preferred
-      principalSlider.style.display = "none";
-      toggleBtn.textContent = "-"; // Change to minus to allow reverting
-    } else {
-      principalManual.style.display = "none";
-      principalSlider.style.display = "block";
-      toggleBtn.textContent = "+";
-    }
-  });
-
-  // (Keep your existing event listeners — e.g. for PDF download, compareBtn, etc.)
-  const downloadBtn = document.getElementById("downloadPdfBtn");
-  downloadBtn.addEventListener("click", () => {
-    html2canvas(document.getElementById("comparisonTableContainer")).then(canvas => {
-      const imgData = canvas.toDataURL("image/png");
-      const { jsPDF } = window.jspdf;
-      const pdf = new jsPDF("l", "mm", "a4"); // landscape mode
-
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const imgWidth = pageWidth - 20;
-      const imgHeight = canvas.height * imgWidth / canvas.width;
-      pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-      pdf.save("comparison.pdf");
-    }).catch(error => {
-      console.error("Error generating PDF:", error);
-    });
-  });
-
-  // Other event listeners...
-
-  const compareBtn = document.getElementById("compareBtn");
-  const tableBody = document.querySelector("#comparisonTable tbody");
-  
-  compareBtn.addEventListener("click", () => {
-    // Limit comparisons to 10 scenarios.
-    if (tableBody.children.length >= 10) {
-      alert("You can compare a maximum of 10 scenarios.");
-      return;
-    }
-    
-    // Example: create a new row and populate it (customize as needed)
-    const newRow = document.createElement("tr");
-    
-    // Populate cells with sample data for now.
-    newRow.innerHTML = `
-      <td>Scenario ${tableBody.children.length + 1}</td>
-      <td>${document.getElementById("principalManual").value || '-'}</td>
-      <td>${document.getElementById("roi").value}</td>
-      <td>${document.getElementById("tenure").value}</td>
-      <td>${document.getElementById("additionalPayments").value}</td>
-      <td>${document.getElementById("frequency").options[document.getElementById("frequency").selectedIndex].text}</td>
-      <td>EMI</td>
-      <td>Est. Int</td>
-      <td>Act. Int</td>
-      <td>Adj. Tenure</td>
-    `;
-    
-    tableBody.appendChild(newRow);
-  });
-
-  // Restore saved input values from localStorage.
+  // DOM elements
   const principalInput = document.getElementById("principalManual");
   const roiInput = document.getElementById("roi");
   const tenureInput = document.getElementById("tenure");
   const additionalPaymentsInput = document.getElementById("additionalPayments");
   const frequencySelect = document.getElementById("frequency");
-
-  if (localStorage.getItem("principalManual")) {
-    principalInput.value = localStorage.getItem("principalManual");
-  }
-  if (localStorage.getItem("roi")) {
-    roiInput.value = localStorage.getItem("roi");
-    document.getElementById("roiValue").textContent = roiInput.value;
-  }
-  if (localStorage.getItem("tenure")) {
-    tenureInput.value = localStorage.getItem("tenure");
-    document.getElementById("tenureValue").textContent = tenureInput.value;
-  }
-  if (localStorage.getItem("additionalPayments")) {
-    additionalPaymentsInput.value = localStorage.getItem("additionalPayments");
-    document.getElementById("additionalPaymentsValue").textContent = additionalPaymentsInput.value;
-  }
-  if (localStorage.getItem("frequency")) {
-    frequencySelect.value = localStorage.getItem("frequency");
-  }
-
-  // Save changes to localStorage whenever inputs change.
-  principalInput.addEventListener("input", () => {
-    localStorage.setItem("principalManual", principalInput.value);
-    calculateLoan();
-  });
-
-  roiInput.addEventListener("input", function() {
-    document.getElementById("roiValue").textContent = this.value;
-    localStorage.setItem("roi", this.value);
-    calculateLoan();
-  });
-
-  tenureInput.addEventListener("input", function() {
-    document.getElementById("tenureValue").textContent = this.value;
-    localStorage.setItem("tenure", this.value);
-    calculateLoan();
-  });
-
-  additionalPaymentsInput.addEventListener("input", function() {
-    document.getElementById("additionalPaymentsValue").textContent = this.value;
-    localStorage.setItem("additionalPayments", this.value);
-    calculateLoan();
-  });
-
-  frequencySelect.addEventListener("change", function() {
-    localStorage.setItem("frequency", this.value);
-    calculateLoan();
-  });
-
-  // Only one event listener for the "Add to Comparison" button.
   const compareBtn = document.getElementById("compareBtn");
+  const clearBtn = document.getElementById("clearBtn");
+  const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+
+  // Restore saved input values from localStorage and set up event listeners
+  function restoreAndSetupInput(inputElement, storageKey, updateFunction) {
+    if (localStorage.getItem(storageKey)) {
+      inputElement.value = localStorage.getItem(storageKey);
+      if (updateFunction) {
+        updateFunction();
+      }
+    }
+    inputElement.addEventListener("input", () => {
+      localStorage.setItem(storageKey, inputElement.value);
+      if (updateFunction) {
+        updateFunction();
+      }
+      calculateLoan();
+    });
+  }
+
+  restoreAndSetupInput(principalInput, "principalManual");
+  restoreAndSetupInput(roiInput, "roi", () => updateSliderValue("roi", "roiValue"));
+  restoreAndSetupInput(tenureInput, "tenure", () => updateSliderValue("tenure", "tenureValue"));
+  restoreAndSetupInput(additionalPaymentsInput, "additionalPayments", () => updateSliderValue("additionalPayments", "additionalPaymentsValue"));
+  restoreAndSetupInput(frequencySelect, "frequency"); // No need for an update function for the select element
+
+  frequencySelect.addEventListener("change", () => {
+      localStorage.setItem("frequency", frequencySelect.value);
+      calculateLoan();
+  })
+
+  // Event listener for the "Add to Comparison" button.
   compareBtn.addEventListener("click", addToComparison);
 
   // Event listener for the "Clear Comparisons" button.
-  document.getElementById("clearBtn").addEventListener("click", clearComparisons);
+  clearBtn.addEventListener("click", clearComparisons);
 
   // Event listener for the PDF download button.
-  document.getElementById("downloadPdfBtn").addEventListener("click", () => {
+  downloadPdfBtn.addEventListener("click", () => {
     html2canvas(document.getElementById("comparisonTableContainer")).then(canvas => {
       const imgData = canvas.toDataURL("image/png");
       const {
@@ -436,6 +324,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Do an initial calculation.
+  // Initial calculation
   calculateLoan();
 });

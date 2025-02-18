@@ -1,24 +1,28 @@
 /* General Styles */
 :root {
-  --primary-color: #18A999;        /* New button primary color */
-  --secondary-color: #009688;      /* New button hover color */
+  --primary-color: #18A999;
+  --secondary-color: #009688;
   --background-color: #f9f9f9;
   --container-background: #fff;
   --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   --form-background: #ffffff;
+  --text-color: #333; /* Default text color */
+  --label-color: #555; /* Label text color */
 }
 
 /* Reset body styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: var(--background-color);
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  display: block;
+  display: flex;
+  flex-direction: column; /* Ensure footer stays at the bottom */
+  color: var(--text-color); /* Apply default text color */
 }
 
-/* Main container styles */
+/* Main content styles */
 .container {
   width: 90%;
   max-width: 1300px;
@@ -27,26 +31,27 @@ body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: var(--box-shadow);
+  flex: 1; /* Take up remaining vertical space */
 }
 
 /* Top Row Layout: Form and Charts */
 .top-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
   gap: 20px;
   padding: 20px;
   align-items: flex-start;
 }
 
-/* Desktop/Laptop view: Fixed column widths */
+/* Column widths */
 .left-col {
-  flex: 0 0 30%;  /* Fixed 30% width for the form */
-  max-width: 30%;
+  flex: 1 1 300px; /* Grow, shrink, base width */
+  min-width: 300px;
 }
 
 .right-col {
-  flex: 0 0 70%;  /* Fixed 70% width for charts/results */
-  max-width: 70%;
+  flex: 1 1 500px; /* Grow, shrink, base width */
+  min-width: 500px;
 }
 
 /* Form container styles */
@@ -60,19 +65,25 @@ body {
 h1 {
   text-align: center;
   margin-bottom: 15px;
+  color: var(--primary-color);
 }
 
 label {
   display: block;
   margin: 10px 0 5px;
   font-weight: bold;
+  color: var(--label-color);
 }
 
 input[type="number"],
 input[type="range"],
 select {
   width: 100%;
+  padding: 8px;
   margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
 }
 
 button {
@@ -94,6 +105,18 @@ button:hover {
 /* Results styles */
 #results {
   margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f0f8ff; /* Light blue background */
+  border-radius: 8px;
+}
+
+#results h2 {
+  color: var(--primary-color);
+  margin-top: 0;
+}
+
+#results p {
+  margin: 8px 0;
 }
 
 /* Charts layout */
@@ -115,7 +138,7 @@ button:hover {
 
 .canvas-wrapper {
   width: 100%;
-  height: 100%;
+  height: 300px; /* Fixed height for chart canvases */
   position: relative;
 }
 
@@ -157,6 +180,7 @@ canvas {
 
 #comparisonTable th {
   background-color: #f2f2f2;
+  font-weight: bold;
 }
 
 #comparisonTable th:nth-child(5),
@@ -181,10 +205,15 @@ html {
   .top-row {
     flex-direction: column;
   }
+
   .left-col,
   .right-col {
     flex: 1 1 100%;
     max-width: 100%;
+  }
+
+  .chart-container {
+    flex: 1 1 100%; /* Each chart takes full width on mobile */
   }
 }
 

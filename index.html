@@ -11,40 +11,42 @@
 <body>
   <!-- Main content container -->
   <div class="container">
+    <!-- Top Row: Form and Charts -->
     <div class="top-row">
       <!-- Left Column: Form -->
       <div class="left-col">
+        <!-- Form Container -->
         <div class="form-container">
           <h1>Home Loan Calculator</h1>
           <form id="loanForm">
             <!-- Principal Amount -->
             <div class="form-group">
               <label for="principalManual">Principal Amount (₹):</label>
-              <input type="number" id="principalManual" placeholder="Enter amount manually">
+              <input type="number" id="principalManual" placeholder="Enter amount manually" aria-label="Principal Amount">
             </div>
 
             <!-- Rate of Interest Slider -->
             <div class="form-group">
               <label for="roi">Rate of Interest (%): <span id="roiValue">7.0</span></label>
-              <input type="range" id="roi" min="7" max="11" step="0.1" value="7" />
+              <input type="range" id="roi" min="7" max="11" step="0.1" value="7" aria-label="Rate of Interest" />
             </div>
 
             <!-- Tenure Slider -->
             <div class="form-group">
               <label for="tenure">Tenure (Years): <span id="tenureValue">5</span></label>
-              <input type="range" id="tenure" min="1" max="30" step="1" value="5" />
+              <input type="range" id="tenure" min="1" max="30" step="1" value="5" aria-label="Tenure" />
             </div>
 
             <!-- Additional Payments Slider -->
             <div class="form-group">
               <label for="additionalPayments">Additional Payments (₹): <span id="additionalPaymentsValue">0</span></label>
-              <input type="range" id="additionalPayments" min="0" max="1000000" step="1000" value="0" />
+              <input type="range" id="additionalPayments" min="0" max="1000000" step="1000" value="0" aria-label="Additional Payments" />
             </div>
 
             <!-- Additional Payments Frequency -->
             <div class="form-group">
               <label for="frequency">Frequency of Additional Payments:</label>
-              <select id="frequency">
+              <select id="frequency" aria-label="Frequency of Additional Payments">
                 <option value="1">Monthly</option>
                 <option value="3">Quarterly</option>
                 <option value="6">Half-Yearly</option>
@@ -60,6 +62,7 @@
 
       <!-- Right Column: Results and Charts -->
       <div class="right-col">
+        <!-- Results Section -->
         <div id="results">
           <h2>Results</h2>
           <p>Monthly EMI: ₹<span id="emi">0</span></p>
@@ -68,6 +71,7 @@
           <p>Adjusted Tenure: <span id="adjustedTenure">0</span> years</p>
         </div>
 
+        <!-- Charts Section -->
         <div class="charts">
           <div class="chart-container">
             <h3>Total Payment Breakdown</h3>
@@ -86,6 +90,7 @@
     </div>
   </div>
 
+  <!-- Comparison Table Container -->
   <div id="comparisonTableContainer">
     <h2>Comparison Table</h2>
     <button id="downloadPdfBtn" type="button">Download PDF</button>
@@ -110,16 +115,20 @@
     </table>
   </div>
 
-  <!-- New Footer -->
+  <!-- Footer -->
   <footer>
-    <p>&copy; 2025 netburk.com</p>
+    <p>&copy; <span id="copyright-year"></span> netburk.com</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="script.js"></script>
+    <!-- JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+  <script src="script.js" defer></script>
+  <script>
+      // Dynamically set the copyright year
+      document.getElementById('copyright-year').textContent = new Date().getFullYear();
+  </script>
 </body>
 
 </html>
-```
