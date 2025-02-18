@@ -1,4 +1,4 @@
-# Home Loan Calculator
+# Home Loan Calculator -- version 3.1
 
 This project is a web-based home loan calculator that allows users to estimate their monthly EMI, compare different loan scenarios, and download the comparison table as a PDF.
 

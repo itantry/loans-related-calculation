@@ -2,7 +2,7 @@ let pieChartInstance = null;
 let lineChartInstance = null;
 
 /**
- * Updates the displayed value of a slider.
+ * Updates the displayed value of a slider--version 3.1.
  * @param {string} sliderId - The ID of the slider element.
  * @param {string} valueSpanId - The ID of the span element displaying the value.
  */
