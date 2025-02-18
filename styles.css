@@ -1,186 +1,228 @@
-/* General Styles --version 3.1 */
+/* General Styles */
 :root {
-  --primary-color: #18A999;
-  --secondary-color: #009688;
-  --background-color: #f9f9f9;
-  --container-background: #fff;
-  --box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  --form-background: #ffffff;
-  --text-color: #333; /* Default text color */
-  --label-color: #555; /* Label text color */
+    --primary-color: #4e54c8; /* Updated primary color */
+    --secondary-color: #8f94fb; /* Updated secondary color */
+    --background-color: #f8f9fa; /* Light gray background */
+    --container-background: #fff;
+    --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* More pronounced box shadow */
+    --form-background: #ffffff;
+    --text-color: #333; /* Default text color */
+    --label-color: #555; /* Label text color */
+    --input-border-color: #ced4da; /* Input border color */
+    --button-hover-color: #364fc7; /* Darker shade for button hover */
 }
 
 /* Reset body styles */
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: var(--background-color);
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column; /* Ensure footer stays at the bottom */
-  color: var(--text-color); /* Apply default text color */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* More modern font */
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
 }
 
 /* Main content styles */
 .container {
-  width: 90%;
-  max-width: 1300px;
-  margin: 2rem auto;
-  background: var(--container-background);
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  flex: 1; /* Take up remaining vertical space */
+    width: 90%;
+    max-width: 1300px;
+    margin: 2rem auto;
+    background: var(--container-background);
+    padding: 25px; /* Increased padding */
+    border-radius: 12px; /* Larger border radius */
+    box-shadow: var(--box-shadow);
+    flex: 1;
 }
 
 /* Top Row Layout: Form and Charts */
 .top-row {
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping on smaller screens */
-  gap: 20px;
-  padding: 20px;
-  align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px; /* Increased gap */
+    padding: 25px; /* Increased padding */
+    align-items: flex-start;
 }
 
 /* Column widths */
 .left-col {
-  flex: 1 1 300px; /* Grow, shrink, base width */
-  min-width: 300px;
+    flex: 1 1 300px;
+    min-width: 300px;
 }
 
 .right-col {
-  flex: 1 1 500px; /* Grow, shrink, base width */
-  min-width: 500px;
+    flex: 1 1 500px;
+    min-width: 500px;
 }
 
 /* Form container styles */
 .form-container {
-  background-color: var(--form-background);
-  padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+    background-color: var(--form-background);
+    padding: 25px; /* Increased padding */
+    border-radius: 12px; /* Larger border radius */
+    margin-bottom: 25px; /* Increased margin */
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 15px;
-  color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px; /* Increased margin */
+    color: var(--primary-color);
+    font-size: 2.2rem; /* Larger font size */
 }
 
 label {
-  display: block;
-  margin: 10px 0 5px;
-  font-weight: bold;
-  color: var(--label-color);
+    display: block;
+    margin: 12px 0 6px; /* Adjusted margin */
+    font-weight: bold;
+    color: var(--label-color);
 }
 
 input[type="number"],
 input[type="range"],
 select {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; /* Include padding and border in element's total width and height */
+    width: 100%;
+    padding: 10px; /* Increased padding */
+    margin-bottom: 18px; /* Increased margin */
+    border: 1px solid var(--input-border-color);
+    border-radius: 6px; /* Smaller border radius */
+    box-sizing: border-box;
+    font-size: 1rem; /* Standardized font size */
+}
+
+/* Style for range input */
+input[type="range"] {
+    -webkit-appearance: none; /* Remove default styles */
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    background: #d3d3d3; /* Light gray background */
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+input[type="range"]:hover {
+    opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
 }
 
 button {
-  background-color: var(--primary-color);
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  padding: 10px;
-  width: 100%;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 6px; /* Smaller border radius */
+    cursor: pointer;
+    padding: 12px; /* Increased padding */
+    width: 100%;
+    margin-bottom: 12px; /* Adjusted margin */
+    transition: background-color 0.3s ease;
+    font-size: 1rem; /* Standardized font size */
 }
 
 button:hover {
-  background-color: var(--secondary-color);
+    background-color: var(--button-hover-color);
 }
 
 /* Results styles */
 #results {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #f0f8ff; /* Light blue background */
-  border-radius: 8px;
+    margin-bottom: 25px; /* Increased margin */
+    padding: 20px; /* Increased padding */
+    background-color: #f0f8ff;
+    border-radius: 12px; /* Larger border radius */
 }
 
 #results h2 {
-  color: var(--primary-color);
-  margin-top: 0;
+    color: var(--primary-color);
+    margin-top: 0;
+    font-size: 1.8rem; /* Larger font size */
 }
 
 #results p {
-  margin: 8px 0;
+    margin: 10px 0; /* Adjusted margin */
+    font-size: 1rem;
 }
 
 /* Charts layout */
 .charts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px; /* Increased gap */
+    margin: 25px 0; /* Increased margin */
 }
 
 .chart-container {
-  flex: 1 1 calc(50% - 10px);
-  min-width: 300px;
-  background: #fff;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
+    flex: 1 1 calc(50% - 12.5px); /* Adjusted calculation for gap */
+    min-width: 300px;
+    background: #fff;
+    padding: 20px; /* Increased padding */
+    border-radius: 12px; /* Larger border radius */
+    box-shadow: var(--box-shadow);
 }
 
 .canvas-wrapper {
-  width: 100%;
-  height: 300px; /* Fixed height for chart canvases */
-  position: relative;
+    width: 100%;
+    height: 300px;
+    position: relative;
 }
 
 canvas {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  position: absolute;
-  top: 0;
-  left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 /* Comparison table styles */
 #comparisonTableContainer {
-  width: 90%;
-  max-width: 1300px;
-  margin: 2rem auto;
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  overflow-x: auto;
+    width: 90%;
+    max-width: 1300px;
+    margin: 2rem auto;
+    padding: 25px; /* Increased padding */
+    background-color: #fff;
+    border-radius: 12px; /* Larger border radius */
+    box-shadow: var(--box-shadow);
+    overflow-x: auto;
 }
 
 #comparisonTable {
-  width: 100%;
-  border-collapse: collapse;
-  white-space: nowrap;
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
 }
 
 #comparisonTable th,
 #comparisonTable td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
+    border: 1px solid #ddd;
+    padding: 10px; /* Increased padding */
+    text-align: left;
 }
 
 #comparisonTable th {
-  background-color: #f2f2f2;
-  font-weight: bold;
+    background-color: #f2f2f2;
+    font-weight: bold;
 }
 
 #comparisonTable th:nth-child(5),
@@ -191,70 +233,70 @@ canvas {
 #comparisonTable td:nth-child(8),
 #comparisonTable td:nth-child(9),
 #comparisonTable th:nth-child(10) {
-  white-space: normal;
-  word-wrap: break-word;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 /* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 /* Responsive (Mobile) layout */
 @media (max-width: 768px) {
-  .top-row {
-    flex-direction: column;
-  }
+    .top-row {
+        flex-direction: column;
+    }
 
-  .left-col,
-  .right-col {
-    flex: 1 1 100%;
-    max-width: 100%;
-  }
+    .left-col,
+    .right-col {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
 
-  .chart-container {
-    flex: 1 1 100%; /* Each chart takes full width on mobile */
-  }
+    .chart-container {
+        flex: 1 1 100%;
+    }
+     #comparisonTableContainer{
+        width: 98%;
+    }
 }
 
 /* New styling for the principal amount toggle group */
 .form-group {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .input-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
 }
 
 .input-toggle input[type="range"] {
-  flex: 1;
+    flex: 1;
 }
 
 .input-toggle button {
-  background-color: var(--secondary-color);
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    background-color: var(--secondary-color);
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .input-toggle button:hover {
-  background-color: var(--primary-color);
+    background-color: var(--primary-color);
 }
 
 /* Footer styling */
 footer {
-  background-color: #f2f2f2;
-  padding: 15px;
-  text-align: center;
-  font-size: 0.9em;
-  margin-top: 20px;
+    background-color: #f2f2f2;
+    padding: 15px;
+    text-align: center;
+    font-size: 0.9em;
+    margin-top: 20px;
 }
-
-/* You can adjust other styles as needed. For example, if inspired by https://groww.in/calculators/emi-calculator,
-   you might use similar padding, font-sizes, etc. */
