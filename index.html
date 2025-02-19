@@ -100,11 +100,32 @@
       <div class="left-col">
         <!-- Form Container -->
         <div class="form-container">
+            <!-- Calculator Type Selection -->
+            <div class="form-group">
+                <label for="calculatorType">Calculator Type:</label>
+                <select id="calculatorType" aria-label="Calculator Type">
+                    <option value="emi">EMI Calculator</option>
+                    <option value="eligibility">Eligibility Calculator</option>
+                    <option value="loanAmount">Loan Amount Calculator</option>
+                </select>
+            </div>
           <form id="loanForm">
+            <!-- EMI Input -->
+            <div class="form-group">
+              <label for="emiInput">Desired EMI (₹):</label>
+              <input type="number" id="emiInput" placeholder="Enter desired EMI" aria-label="Desired EMI">
+            </div>
+
             <!-- Principal Amount -->
             <div class="form-group">
               <label for="principalManual">Principal Amount (₹):</label>
               <input type="number" id="principalManual" placeholder="Enter amount manually" aria-label="Principal Amount">
+            </div>
+
+             <!-- Annual Income -->
+            <div class="form-group">
+              <label for="annualIncome">Annual Income (₹):</label>
+              <input type="number" id="annualIncome" placeholder="Enter annual income" aria-label="Annual Income">
             </div>
 
             <!-- Rate of Interest Slider -->

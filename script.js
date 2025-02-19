@@ -23,31 +23,78 @@ function calculateLoan() {
   const tenure = parseFloat(document.getElementById('tenure').value);
   const additionalPayments = parseFloat(document.getElementById('additionalPayments').value);
   const paymentFrequency = parseInt(document.getElementById('frequency').value);
+    const annualIncome = parseFloat(document.getElementById('annualIncome').value);
 
-  // Validate principal amount
-  if (isNaN(principal) || principal <= 0) {
+    // Validate principal amount for EMI calculator
+    if (document.getElementById('calculatorType').value === "emi" && (isNaN(principal) || principal <= 0)) {
+        alert("Please enter a valid principal amount.");
+        return;
+    }
+
+    // Validate annual income for eligibility calculator
+    if (document.getElementById('calculatorType').value === "eligibility" && (isNaN(annualIncome) || annualIncome <= 0)) {
+        alert("Please enter a valid annual income.");
+        return;
+    }
+
+
+  const emiInput = parseFloat(document.getElementById('emiInput').value);
+
+  // Validate principal amount for EMI calculator
+    if (document.getElementById('calculatorType').value === "emi" && (isNaN(principal) || principal <= 0)) {
     alert("Please enter a valid principal amount.");
     return;
   }
 
-  const {
-    emi,
-    estimatedInterest
-  } = calculateEmiAndInterest(principal, interestRate, tenure);
-  const {
-    actualInterest,
-    adjustedTenureMonths
-  } = calculateActualInterestAndAdjustedTenure(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
+  // Validate annual income for eligibility calculator
+    if (document.getElementById('calculatorType').value === "eligibility" && (isNaN(annualIncome) || annualIncome <= 0)) {
+    alert("Please enter a valid annual income.");
+    return;
+  }
 
-  // Display results in the main results section
-  document.getElementById('emi').textContent = emi.toFixed(2);
-  document.getElementById('estimatedInterest').textContent = estimatedInterest.toFixed(2);
-  document.getElementById('actualInterest').textContent = actualInterest.toFixed(2);
-  document.getElementById('adjustedTenure').textContent = (adjustedTenureMonths / 12).toFixed(1);
+    // Validate EMI input for loan amount calculator
+    if (document.getElementById('calculatorType').value === "loanAmount" && (isNaN(emiInput) || emiInput <= 0)) {
+        alert("Please enter a valid EMI amount.");
+        return;
+    }
 
-  // Update charts
-  updatePieChart(principal, actualInterest);
-  updateLineChart(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
+  if (document.getElementById('calculatorType').value === "emi") {
+    const {
+      emi,
+      estimatedInterest
+    } = calculateEmiAndInterest(principal, interestRate, tenure);
+    const {
+      actualInterest,
+      adjustedTenureMonths
+    } = calculateActualInterestAndAdjustedTenure(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
+
+    // Display results in the main results section
+    document.getElementById('emi').textContent = emi.toFixed(2);
+    document.getElementById('estimatedInterest').textContent = estimatedInterest.toFixed(2);
+    document.getElementById('actualInterest').textContent = actualInterest.toFixed(2);
+    document.getElementById('adjustedTenure').textContent = (adjustedTenureMonths / 12).toFixed(1);
+
+    // Update charts
+    updatePieChart(principal, actualInterest);
+    updateLineChart(principal, interestRate, tenure, additionalPayments, paymentFrequency, emi);
+  } else if (document.getElementById('calculatorType').value === "eligibility") {
+    // Simple eligibility calculation: Max loan amount = 5 times annual income
+    const maxLoanAmount = annualIncome * 5;
+    document.getElementById('maxLoanAmount').textContent = maxLoanAmount.toFixed(2);
+  } else if (document.getElementById('calculatorType').value === "loanAmount") {
+        const loanAmount = calculateLoanAmount(emiInput, interestRate, tenure);
+        document.getElementById('loanAmount').textContent = loanAmount.toFixed(2);
+    }
+}
+
+/**
+ * Calculates the loan amount based on EMI, interest rate, and tenure.
+ */
+function calculateLoanAmount(emi, interestRate, tenure) {
+    const monthlyInterestRate = (interestRate / 100) / 12;
+    const numberOfPayments = tenure * 12;
+    const loanAmount = (emi * (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1)) / (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments));
+    return loanAmount;
 }
 
 /**
@@ -293,7 +340,9 @@ document.addEventListener("DOMContentLoaded", () => {
   restoreAndSetupInput(roiInput, "roi", () => updateSliderValue("roi", "roiValue"));
   restoreAndSetupInput(tenureInput, "tenure", () => updateSliderValue("tenure", "tenureValue"));
   restoreAndSetupInput(additionalPaymentsInput, "additionalPayments", () => updateSliderValue("additionalPayments", "additionalPaymentsValue"));
-  restoreAndSetupInput(frequencySelect, "frequency"); // No need for an update function for the select element
+    restoreAndSetupInput(frequencySelect, "frequency"); // No need for an update function for the select element
+  restoreAndSetupInput(document.getElementById("annualIncome"), "annualIncome");
+    restoreAndSetupInput(document.getElementById("emiInput"), "emiInput");
 
   frequencySelect.addEventListener("change", () => {
       localStorage.setItem("frequency", frequencySelect.value);
@@ -304,7 +353,63 @@ document.addEventListener("DOMContentLoaded", () => {
   compareBtn.addEventListener("click", addToComparison);
 
   // Event listener for the "Clear Comparisons" button.
-  clearBtn.addEventListener("click", clearComparisons);
+    clearBtn.addEventListener("click", clearComparisons);
+
+    const calculatorTypeSelect = document.getElementById("calculatorType");
+    restoreAndSetupInput(calculatorTypeSelect, "calculatorType");
+
+    calculatorTypeSelect.addEventListener("change", () => {
+        console.log("Calculator type changed:", calculatorTypeSelect.value);
+        localStorage.setItem("calculatorType", calculatorTypeSelect.value);
+        updateUIBasedOnCalculatorType();
+    });
+
+  function updateUIBasedOnCalculatorType() {
+    const calculatorType = document.getElementById("calculatorType").value;
+    const additionalPaymentsSection = document.getElementById("additionalPayments").closest(".form-group");
+    const comparisonTableContainer = document.getElementById("comparisonTableContainer");
+    const resultsSection = document.getElementById("results");
+    const principalInput = document.getElementById("principalManual").closest(".form-group");
+    const emiInput = document.getElementById("emiInput").closest(".form-group");
+    const annualIncomeInput = document.getElementById("annualIncome").closest(".form-group");
+
+
+    // Hide all optional input sections by default
+    additionalPaymentsSection.style.display = "none";
+    principalInput.style.display = "none";
+    emiInput.style.display = "none";
+    annualIncomeInput.style.display = "none";
+
+    if (calculatorType === "eligibility") {
+        annualIncomeInput.style.display = "block";
+        comparisonTableContainer.style.display = "none";
+        resultsSection.innerHTML = `
+            <h2>Results</h2>
+            <p>Maximum Loan Amount: ₹<span id="maxLoanAmount">0</span></p>
+            <p>Based on your inputs, you are eligible for a loan up to this amount.</p>
+        `;
+
+    } else if (calculatorType === "loanAmount") {
+        emiInput.style.display = "block";
+        comparisonTableContainer.style.display = "none"; // Typically not used for loan amount calculation
+        resultsSection.innerHTML = `
+            <h2>Results</h2>
+            <p>Loan Amount: ₹<span id="loanAmount">0</span></p>
+        `;
+    }
+    else { // Default to EMI calculator
+        additionalPaymentsSection.style.display = "block";
+        principalInput.style.display = "block";
+        comparisonTableContainer.style.display = "block";
+        resultsSection.innerHTML = `
+            <h2>Results</h2>
+            <p>Monthly EMI: ₹<span id="emi">0</span></p>
+            <p>Estimated Interest (Original Tenure): ₹<span id="estimatedInterest">0</span></p>
+            <p>Actual Interest Paid (with Additional Payments): ₹<span id="actualInterest">0</span></p>
+            <p>Adjusted Tenure: <span id="adjustedTenure">0</span> years</p>
+        `;
+    }
+}
 
   // Event listener for the PDF download button.
   downloadPdfBtn.addEventListener("click", () => {
@@ -324,6 +429,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Initial calculation
-  calculateLoan();
+  // Initial calculation and UI update
+    calculateLoan();
+    updateUIBasedOnCalculatorType();
+
 });
